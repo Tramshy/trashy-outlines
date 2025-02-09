@@ -14,6 +14,10 @@ Quick and easy to use outline shader for Unity, works with flat normals or smoot
 3. To show the outline, add a material with the `TOutline` shader and a material with the `OutlineMask` shader, or set `ShouldAddOutlineOnAwake` to true. Note: there is a base `OutlineMask` and `TOutline` material in the Resources folder
 4. If you want to programmatically animate the outline thickness, use the `_Multiplier` value from 0 - 1 to decrease and increase thickness 
 
+### Material settings
+The outline material and mask material have their own Enums that determine how the outline will be rendered. These are set per material, so if you want different kinds of outlines you will need multiple materials.
+You can also set the default outlines for an object to use if you use the `ShouldAddOutlineOnAwake` bool on the component, if you leave the fields as null it will use the default outline options.
+
 ## License
 This package is licensed under the MIT License. For more information read: `LICENSE`.
 
