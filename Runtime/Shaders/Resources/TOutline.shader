@@ -5,7 +5,7 @@ Shader "Trashy Outlines/Outline"
         _Thickness("Thickness", Float) = 0.03
         _Color("Outline Color", Color) = (0, 0, 0, 0.65)
         _Multiplier("Multiplier", Float) = 0
-        [Enum(OutlineWThroughObstructions, 0, OnlyOutline, 2, OnlyThroughObstructions, 5)] _ZTestMode("ZTest Mode", Int) = 8
+        [Enum(OutlineWThroughObstructions, 0, OnlyOutline, 2, OnlyThroughObstructions, 5)] _ZTestMode("ZTest Mode", Int) = 0
         [HideInInspector]_QueueOffset("_QueueOffset", Float) = 0
         [HideInInspector]_QueueControl("_QueueControl", Float) = -1
         [HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
