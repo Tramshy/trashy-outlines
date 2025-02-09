@@ -3,6 +3,7 @@ Shader "Trashy Outlines/Outline Mask"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        [Enum(SilhouetteOFF, 0, SilhouetteON, 3)] _ZTestMode("ZTest Mode", Float) = 4
     }
     SubShader
     {
@@ -23,7 +24,7 @@ Shader "Trashy Outlines/Outline Mask"
         {
             Name "Mask"
             Cull Off
-            ZTest LEqual
+            ZTest [_ZTestMode]
             ZWrite Off
             ColorMask 0
         }
