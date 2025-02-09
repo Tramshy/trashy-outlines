@@ -1,0 +1,11 @@
+{
+  "name": "com.tramshy.trashy-outlines",
+  "version": "1.0.0",
+  "displayName": "Trashy Outlines",
+  "description": "Simple outlines that work for objects with flat normals and smooth normals",
+  "unity": "2022.3",
+  "author": {
+    "name": "Trashy aka Simon",
+    "url": "https://big-trashy.itch.io/"
+  }
+}
