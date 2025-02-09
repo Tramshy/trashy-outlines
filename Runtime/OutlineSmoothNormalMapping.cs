@@ -30,10 +30,7 @@ namespace TrashyOutlines
 
             if (_shouldAddOutlineOnAwake)
             {
-                Material o = _outline, m = _mask;
-
-                try { _outline.GetInstanceID(); } catch { o = null; }
-                try { _mask.GetInstanceID(); } catch { m = null; }
+                Material o = _outline == null ? null : _outline, m = _mask == null ? null : _mask;
 
                 AddOutlines(o, m);
             }
