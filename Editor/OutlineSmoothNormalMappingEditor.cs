@@ -9,9 +9,29 @@ namespace TrashyOutlines.OutlineEditor
         private string _errorMessage;
         private bool _showError;
 
+        private SerializedProperty _showMaterialFields;
+        private SerializedProperty _outlineField, _maskField;
+
+        private void OnEnable()
+        {
+            _showMaterialFields = serializedObject.FindProperty("_shouldAddOutlineOnAwake");
+            _outlineField = serializedObject.FindProperty("_outline");
+            _maskField = serializedObject.FindProperty("_mask");
+        }
+
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+            serializedObject.Update();
+
+            DrawPropertiesExcluding(serializedObject, "_outline", "_mask");
+
+            if (_showMaterialFields.boolValue)
+            {
+                EditorGUILayout.PropertyField(_outlineField);
+                EditorGUILayout.PropertyField(_maskField);
+            }
+
+            serializedObject.ApplyModifiedProperties();
 
             OutlineSmoothNormalMapping outlineSmoothNormal = (OutlineSmoothNormalMapping)target;
 

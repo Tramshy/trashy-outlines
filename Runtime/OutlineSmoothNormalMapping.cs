@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,9 +17,11 @@ namespace TrashyOutlines
 
         [HideInInspector] public Mesh CurrentMesh, PreviousMesh;
 
-        public Vector3[] SmoothNormals;
+        [HideInInspector] public Vector3[] SmoothNormals;
 
         [SerializeField] private bool _shouldAddOutlineOnAwake;
+        [Tooltip("You can put any material here, but make sure it is uses the correct shaders (TOutline, OutlineMask) or else it will use the default outlines. Can be left null if you want to use the default outline settings")]
+        [SerializeField] private Material _outline, _mask;
 
         private void Awake()
         {
@@ -26,7 +29,14 @@ namespace TrashyOutlines
                 return;
 
             if (_shouldAddOutlineOnAwake)
-                AddOutlines();
+            {
+                Material o = _outline, m = _mask;
+
+                try { _outline.GetInstanceID(); } catch { o = null; }
+                try { _mask.GetInstanceID(); } catch { m = null; }
+
+                AddOutlines(o, m);
+            }
 
             foreach (MeshFilter filter in GetComponentsInChildren<MeshFilter>())
             {
@@ -58,8 +68,14 @@ namespace TrashyOutlines
         /// <param name="mask">The mask to use, if left null it will use the default mask instance in resources. This should almost always be left null, unless you are trying to achieve something very specific</param>
         public void AddOutlines(Material outline = null, Material mask = null)
         {
-            outline = outline ?? Resources.Load<Material>(@"Materials/Outline");
-            mask = mask ?? Resources.Load<Material>(@"Materials/Outline Mask");
+            var defaultOutline = Resources.Load<Material>(@"Materials/Outline");
+            var defaultMask = Resources.Load<Material>(@"Materials/Outline Mask");
+
+            outline = outline ?? defaultOutline;
+            mask = mask ?? defaultMask;
+
+            outline = outline.shader == Resources.Load<Shader>(@"TOutline") ? outline : defaultOutline;
+            mask = mask.shader == Resources.Load<Shader>(@"OutlineMask") ? mask : defaultMask;
 
             var renderer = GetComponentInChildren<Renderer>();
 
