@@ -7,6 +7,7 @@ Quick and easy to use outline shader for Unity, works with flat normals or smoot
 * Easily edited outline thickness, color and alpha
 * Easily animated outlines (like the outlines expanding)
 * Allows for precalculating of values for the outlines
+* Available for download as package in Unity
 
 ## Usage
 1. Add the `OutlineSmoothNormalMapping` component to your object
