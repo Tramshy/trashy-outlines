@@ -23,8 +23,15 @@ namespace TrashyOutlines
         [Tooltip("You can put any material here, but make sure it is uses the correct shaders (TOutline, OutlineMask) or else it will use the default outlines. Can be left null if you want to use the default outline settings")]
         [SerializeField] private Material _outline, _mask;
 
+        private Renderer _renderer;
+        private Shader _outlineS, _maskS;
+
         private void Awake()
         {
+            _renderer = GetComponentInChildren<Renderer>();
+            _outlineS = Resources.Load<Shader>(@"TOutline");
+            _maskS = Resources.Load<Shader>(@"OutlineMask");
+
             if (SmoothNormals.Length == 0)
                 return;
 
@@ -71,18 +78,41 @@ namespace TrashyOutlines
             outline = outline ?? defaultOutline;
             mask = mask ?? defaultMask;
 
-            outline = outline.shader == Resources.Load<Shader>(@"TOutline") ? outline : defaultOutline;
-            mask = mask.shader == Resources.Load<Shader>(@"OutlineMask") ? mask : defaultMask;
+            outline = outline.shader == _outlineS ? outline : defaultOutline;
+            mask = mask.shader == _maskS ? mask : defaultMask;
 
-            var renderer = GetComponentInChildren<Renderer>();
-
-            if (renderer == null)
+            if (_renderer == null)
                 return;
 
-            var l = renderer.materials.ToList();
+            var l = _renderer.materials.ToList();
             l.Add(mask);
             l.Add(outline);
-            renderer.materials = l.ToArray();
+            _renderer.materials = l.ToArray();
+        }
+
+        public void RemoveOutlines()
+        {
+            var matToRemove = new List<Material>();
+            var materials = _renderer.materials.ToList();
+
+            foreach (var m in materials)
+            {
+                if (m.shader == _outlineS || m.shader == _maskS)
+                    matToRemove.Add(m);
+            }
+
+            matToRemove.ForEach((m) => materials.Remove(m));
+
+            _renderer.materials = materials.ToArray();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+                AddOutlines();
+
+            if (Input.GetKeyDown(KeyCode.M))
+                RemoveOutlines();
         }
 
         public void LoadSmoothNormalsToObject(out ReasonForFailure reason)
