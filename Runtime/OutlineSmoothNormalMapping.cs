@@ -19,7 +19,12 @@ namespace TrashyOutlines
 
         [HideInInspector] public Vector3[] SmoothNormals;
 
+        [Tooltip("Certain objects with a lot of materials and submeshes may not be serialized properly, this means that when restarting the project the outlines will look strange until smooth normals are recaluclated.\n" +
+                 "Check this to true if you don't wanna have to recalculate after restarting the project.\n" +
+                 "This can be unchecked for builds, as long as you recalculate before the build")]
+        [SerializeField] private bool _shouldCombineSubmeshesOnAwake;
         [SerializeField] private bool _shouldAddOutlineOnAwake;
+
         [Tooltip("You can put any material here, but make sure it is uses the correct shaders (TOutline, OutlineMask) or else it will use the default outlines. Can be left null if you want to use the default outline settings")]
         [SerializeField] private Material _outline, _mask;
 
@@ -44,6 +49,9 @@ namespace TrashyOutlines
 
             foreach (MeshFilter filter in GetComponentsInChildren<MeshFilter>())
             {
+                if (_shouldCombineSubmeshesOnAwake)
+                    CombineSubmeshes(filter.mesh, _renderer.materials);
+
                 List<Vector3> uv3 = new List<Vector3>();
 
                 filter.sharedMesh.GetUVs(3, uv3);
@@ -56,6 +64,9 @@ namespace TrashyOutlines
 
             foreach (SkinnedMeshRenderer skinnedMesh in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
+                if (_shouldCombineSubmeshesOnAwake)
+                    CombineSubmeshes(skinnedMesh.sharedMesh, _renderer.materials);
+
                 List<Vector3> uv3 = new List<Vector3>();
 
                 skinnedMesh.sharedMesh.GetUVs(3, uv3);
@@ -104,15 +115,6 @@ namespace TrashyOutlines
             matToRemove.ForEach((m) => materials.Remove(m));
 
             _renderer.materials = materials.ToArray();
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.L))
-                AddOutlines();
-
-            if (Input.GetKeyDown(KeyCode.M))
-                RemoveOutlines();
         }
 
         public void LoadSmoothNormalsToObject(out ReasonForFailure reason)
