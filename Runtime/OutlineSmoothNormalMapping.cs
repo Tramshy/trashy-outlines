@@ -7,25 +7,28 @@ namespace TrashyOutlines
 {
     public class OutlineSmoothNormalMapping : MonoBehaviour
     {
+#if UNITY_EDITOR
         public enum ReasonForFailure
         {
             NoFailure,
             NoRenderer,
             NoMaterials,
+            // NoOutlineMaterial is obsolete.
             NoOutlineMaterial
         }
 
+#endif
         [HideInInspector] public Mesh CurrentMesh, PreviousMesh;
 
         [HideInInspector] public Vector3[] SmoothNormals;
 
-        [Tooltip("Certain objects with a lot of materials and submeshes may not be serialized properly, this means that when restarting the project the outlines will look strange until smooth normals are recaluclated.\n" +
+        [Tooltip("Certain objects with a lot of materials and submeshes may not be serialized properly, this means that when restarting the project the outlines will look strange until smooth normals are recalculated.\n" +
                  "Check this to true if you don't wanna have to recalculate after restarting the project.\n" +
                  "This can be unchecked for builds, as long as you recalculate before the build")]
         [SerializeField] private bool _shouldCombineSubmeshesOnAwake;
         [SerializeField] private bool _shouldAddOutlineOnAwake;
 
-        [Tooltip("You can put any material here, but make sure it is uses the correct shaders (TOutline, OutlineMask) or else it will use the default outlines. Can be left null if you want to use the default outline settings")]
+        [Tooltip("You can put any material here, but make sure it uses the correct shaders (TOutline, OutlineMask) or else it will use the default outlines. Can be left null if you want to use the default outline settings")]
         [SerializeField] private Material _outline, _mask;
 
         private Renderer _renderer;
@@ -54,11 +57,13 @@ namespace TrashyOutlines
 
                 List<Vector3> uv3 = new List<Vector3>();
 
+                // Save smooth normal to the third UV of object. Smooth normals are calculated through inspector in editor.
                 filter.sharedMesh.GetUVs(3, uv3);
 
                 if (SmoothNormals.ToList() != uv3)
                     filter.sharedMesh.SetUVs(3, SmoothNormals);
 
+                // Return if MeshFilter is found.
                 return;
             }
 
@@ -117,6 +122,7 @@ namespace TrashyOutlines
             _renderer.materials = materials.ToArray();
         }
 
+#if UNITY_EDITOR
         public void LoadSmoothNormalsToObject(out ReasonForFailure reason)
         {
             reason = ReasonForFailure.NoFailure;
@@ -220,10 +226,8 @@ namespace TrashyOutlines
 
         public List<Vector3> CalculateSmoothNormals(Mesh mesh)
         {
-            /*
-             * First creates a KeyValuePair for all vertices in a mesh based on the key of their position and the value of their index in the mesh vertices array.
-             * Then creates a group for each KeyValuePair based on their Key, this basically creates storage for all vertices of the same position with their index position.
-             */
+             // First creates a KeyValuePair for all vertices in a mesh based on the key of their position and the value of their index in the mesh vertices array.
+             // Then creates a group for each KeyValuePair based on their Key, this basically creates storage for all vertices of the same position with their index position.
             var vertexGroups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy((thisGroup) => thisGroup.Key);
 
             List<Vector3> smoothNormals = new List<Vector3>(mesh.normals);
@@ -252,8 +256,8 @@ namespace TrashyOutlines
 
             return smoothNormals;
         }
+#endif
 
-        // TODO: Understand this, I stole this crap
         private void CombineSubmeshes(Mesh mesh, Material[] materials)
         {
             // Skip meshes with a single submesh

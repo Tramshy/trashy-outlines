@@ -25,6 +25,7 @@ namespace TrashyOutlines.OutlineEditor
 
             DrawPropertiesExcluding(serializedObject, "_outline", "_mask");
 
+            // Hide material fields in inspector if the user doesn't want to edit them on Awake.
             if (_showMaterialFields.boolValue)
             {
                 EditorGUILayout.PropertyField(_outlineField);
@@ -35,6 +36,7 @@ namespace TrashyOutlines.OutlineEditor
 
             OutlineSmoothNormalMapping outlineSmoothNormal = (OutlineSmoothNormalMapping)target;
 
+            // Find the mesh of the OutlineSmoothNormalMapping object. Check both for MeshFilter and SkinnedMeshRenderer.
             outlineSmoothNormal.CurrentMesh = outlineSmoothNormal.TryGetComponent(out MeshFilter mF) ? mF.sharedMesh : outlineSmoothNormal.TryGetComponent(out SkinnedMeshRenderer sMF) ? sMF.sharedMesh : null;
 
             if (outlineSmoothNormal.CurrentMesh == null)
@@ -48,11 +50,11 @@ namespace TrashyOutlines.OutlineEditor
                 {
                     switch (reason)
                     {
-                        default:
-                        case OutlineSmoothNormalMapping.ReasonForFailure.NoOutlineMaterial:
-                            Debug.LogWarning("No outline found on: " + outlineSmoothNormal.gameObject.name + ".");
+                        //default:
+                        //case OutlineSmoothNormalMapping.ReasonForFailure.NoOutlineMaterial:
+                        //    Debug.LogWarning("No outline found on: " + outlineSmoothNormal.gameObject.name + ".");
 
-                            break;
+                        //    break;
 
                         case OutlineSmoothNormalMapping.ReasonForFailure.NoRenderer:
                             Debug.LogError("No renderer found on: " + outlineSmoothNormal.gameObject.name + ".");

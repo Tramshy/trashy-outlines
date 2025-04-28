@@ -14,6 +14,7 @@ Shader "Trashy Outlines/Outline Mask"
         }
         LOD 100
 
+        // Hides any outline that may render on top of the object.
         Stencil
         {
             Ref 1

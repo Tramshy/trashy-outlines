@@ -1,3 +1,4 @@
+// From shader graph to shader code.
 Shader "Trashy Outlines/Outline"
 {
     Properties
@@ -32,6 +33,7 @@ Shader "Trashy Outlines/Outline"
                 // LightMode: <None>
             }
 
+        // Important for mask.
         Stencil
         {
             Ref 1
