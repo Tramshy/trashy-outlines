@@ -24,5 +24,3 @@ This package is licensed under the MIT License. For more information read: `LICE
 
 ## Additional Notes
 There are warning messages and such for the `OutlineSmoothNormalMapping` component, but they randomly broke so just ignore them please!
-
-The use of [UPM Git Extension](https://github.com/mob-sakai/UpmGitExtension) is highly recommended, for easy updating of this package.
