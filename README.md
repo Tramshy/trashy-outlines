@@ -9,6 +9,16 @@ Quick and easy to use outline shader for Unity, works with flat normals or smoot
 * Allows for precalculating of values for the outlines
 * Available for download as package in Unity
 
+## Installation
+This repository is installed as a package for Unity.
+1. `Open Window` > `Package Manager`.
+2. Click `+`.
+3. Select Add Package from git URL.
+4. Paste `https://github.com/Tramshy/trashy-outlines.git`.
+5. Click Add.
+
+NOTE: To do this you need Git installed on your computer.
+
 ## Usage
 1. Add the `OutlineSmoothNormalMapping` component to your object
 2. Precalculate smooth normals using the `Recalculate Normals` button component
