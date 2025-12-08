@@ -21,7 +21,7 @@ NOTE: To do this you need Git installed on your computer.
 ## Usage
 1. Add the `OutlineSmoothNormalMapping` component to your object
 2. Precalculate smooth normals using the `Recalculate Normals` button component
-3. To show the outline, add a material with the `TOutline` shader and a material with the `OutlineMask` shader, or set `ShouldAddOutlineOnAwake` to true. Note: there is a base `OutlineMask` and `TOutline` material in the Resources folder
+3. To show the outline, add a material with the `Outline` shader and a material with the `OutlineMask` shader, or set `ShouldAddOutlineOnAwake` to true. If one, or both, fields are left null after setting this bool to true, it will use the default outline materials and settings (which are found in the Resources folder)
 4. If you want to programmatically animate the outline thickness, use the `_Multiplier` value from 0 - 1 to decrease and increase thickness 
 
 ### Material settings
@@ -30,6 +30,3 @@ You can also set the default outlines for an object to use if you use the `Shoul
 
 ## License
 This package is licensed under the MIT License. For more information read: `LICENSE`.
-
-## Additional Notes
-There are warning messages and such for the `OutlineSmoothNormalMapping` component, but they randomly broke so just ignore them please!
