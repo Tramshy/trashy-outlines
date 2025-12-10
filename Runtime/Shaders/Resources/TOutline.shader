@@ -7,6 +7,8 @@ Shader "Trashy Outlines/Outline"
         _Color("Outline Color", Color) = (0, 0, 0, 0.65)
         _Multiplier("Multiplier", Float) = 0
         [Enum(OutlineWThroughObstructions, 0, OnlyOutline, 2, OnlyThroughObstructions, 5)] _ZTestMode("ZTest Mode", Int) = 0
+        // Matching stencil refs will interact with each other. If you want overlapping outlines for multiple objects, consider giving them different refs in both Mask and Outline.
+        _StencilRef("Stencil Ref (Match Mask)", int) = 1
         [HideInInspector]_QueueOffset("_QueueOffset", Float) = 0
         [HideInInspector]_QueueControl("_QueueControl", Float) = -1
         [HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
@@ -36,7 +38,7 @@ Shader "Trashy Outlines/Outline"
         // Important for mask.
         Stencil
         {
-            Ref 1
+            Ref [_StencilRef]
             Comp NotEqual
         }
         
